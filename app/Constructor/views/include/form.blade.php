@@ -43,6 +43,7 @@ $return_url = !empty($return_url) ? $return_url : g('return_url');
             <label class="control-label col-sm-2"></label>
             <div class="col-sm-10">
                 @if(@$button_cancel && BTBooster::getCurrentMethod() != 'getDetail')
+                    {{--
                     @if(g('return_url'))
                         <a href='{{g("return_url")}}' class='btn btn-default'><i
                                     class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
@@ -50,6 +51,7 @@ $return_url = !empty($return_url) ? $return_url : g('return_url');
                         <a href='{{BTBooster::mainpath("?".http_build_query(@$_GET)) }}' class='btn btn-default'><i
                                     class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
                     @endif
+                    --}}
                 @endif
                 @if(BTBooster::isCreate() || BTBooster::isUpdate())
 
@@ -58,7 +60,9 @@ $return_url = !empty($return_url) ? $return_url : g('return_url');
                     @endif
 
                     @if(@$button_save && @$command != 'detail')
-                        <input type="submit" name="submit" value='{{cbLang("button_save")}}' class='btn btn-success'>
+                        <div class="flex items-center justify-end px-4 py-3 text-right sm:px-6">
+                            <input type="submit" name="submit" value='{{cbLang("button_save")}}' class='inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition'>
+                        </div>
                     @endif
 
                 @endif

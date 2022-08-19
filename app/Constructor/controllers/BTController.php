@@ -1294,8 +1294,10 @@ class BTController extends Controller
         }
 
         $this->hook_before_edit($this->arr, $id);
+//dd($this->table);
+//dump($this->arr);
         DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
-
+//dd(Request::all());
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];

@@ -281,7 +281,10 @@ class BTBooster
             $resp = response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->send();
             exit;
         } else {
+//$to = '/cabinets';
             $resp = redirect($to)->with(['message' => $message, 'message_type' => $type]);
+//dump($resp);
+//dd($to);
             Session::driver()->save();
             $resp->send();
             exit;

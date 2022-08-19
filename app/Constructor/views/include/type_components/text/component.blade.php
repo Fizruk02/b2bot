@@ -8,7 +8,7 @@
     <div class="mt-1 text-sm leading-5 sm:mt-0 sm:w-9/12">
         <?php $validation['max'] = $validation['max'] ?? ''; ?>
         <input type='text' title="{{$form['label']}}"
-               {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=".$validation['max']:""}} class='form-control  transition-all duration-300 ease-in-out px-2 py-1 rounded cursor-pointer focus:outline-none hover:bg-white hover:border-gray-500 border border-transparent'
+               {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=".$validation['max']:""}} class='form-control  transition-all duration-300 ease-in-out px-2 py-1 rounded cursor-pointer focus:outline-none hover:bg-white hover:border-gray-500 border border-transparent border-gray-300 w-full'
                name="{{$name}}" id="{{$name}}" value='{{$value}}'
         />
 
