@@ -474,9 +474,8 @@ class BTBooster
             }
 
             $menu->url = $url;
-            $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
-            $menu->live_path = str_replace(config("crudbooster.ADMIN_PATH").'/', '', $menu->url_path);
-
+            $menu->url_path = trim(str_replace(url('/'), '', $url), "/");//dd($menu->url_path);
+            $menu->live_path = str_replace((config("crudbooster.ADMIN_PATH") ? config("crudbooster.ADMIN_PATH") : 'manager' ).'/', '', $menu->url_path);
             $child = DB::table('cms_menus')->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".self::myPrivilegeId()."')")->where('is_dashboard', 0)->where('is_active', 1)->where('parent_id', $menu->id)->select('cms_menus.*')->orderby('sorting', 'asc')->get();
             if (count($child)) {
 
