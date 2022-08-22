@@ -125,7 +125,7 @@ class CabinetTableView extends TableView
     protected function filters()
     {
         return [
-            //new UsersActiveFilter,
+            new UsersActiveFilter,
             //new CreatedFilter,
             //new UsersTypeFilter
         ];
