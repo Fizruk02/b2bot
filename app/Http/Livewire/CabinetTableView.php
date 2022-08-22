@@ -56,7 +56,7 @@ class CabinetTableView extends TableView
             //$user->status ? UI::icon('check', 'success') : '',
             //$user->created_at,
             //$user->updated_at
-            @$cabinet->finish_at,
+            date('d.m.Y', strtotime($cabinet->finish_at)),
 
             '<a href="'.route('cabinet-plus', $cabinet->id).'?plus=1">'.UI::badge('месяц').'</a> '.
             '<a href="'.route('cabinet-plus', $cabinet->id).'?plus=3">'.UI::badge('3 месяца').'</a> '.
