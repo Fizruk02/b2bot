@@ -4,6 +4,7 @@ namespace App\Constructor\helpers;
 
 use Cache;
 use DB;
+use Illuminate\Support\Facades\Redirect;
 use Image;
 use Request;
 use Route;
@@ -276,17 +277,25 @@ class BTBooster
 
     public static function redirect($to, $message, $type = 'warning')
     {
-
         if (Request::ajax()) {
             $resp = response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->send();
             exit;
         } else {
-//$to = '/cabinets';
+//session()->flash('message', 'Post successfully updated.');
+//$to = 'http://personal.local/cabinets';
             $resp = redirect($to)->with(['message' => $message, 'message_type' => $type]);
-//dump($resp);
-//dd($to);
             Session::driver()->save();
+            if(get_class($resp) == "Illuminate\Http\RedirectResponse") {
+                $resp->send();
+                exit;
+            }
+            $redirectTo = $resp->component->redirectTo;
+            $resp = redirect()->back()->with(['message' => $message, 'message_type' => $type]);
+            //$resp->setTargetUrl($redirectTo);
+            $resp->setTargetUrl($to);
             $resp->send();
+            //Redirect::back()->withErrors(['msg' => 'The Message']);
+            //return $resp;
             exit;
         }
     }

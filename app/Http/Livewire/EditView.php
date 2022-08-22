@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Exception;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Arr;
 use LaravelViews\Facades\UI;
 use LaravelViews\Views\Traits\WithActions;
@@ -11,6 +12,7 @@ use LaravelViews\Views\View;
 class EditView extends View
 {
     use WithActions;
+    use WithoutModelEvents;
 
     protected $view = 'detail-view.edit-view';
     protected $modelClass;
@@ -21,6 +23,7 @@ class EditView extends View
     public $stripe = false;
 
     public $model;
+    public $return_url;
 
     public function mount()
     {
@@ -32,6 +35,9 @@ class EditView extends View
     {
         $detailData = app()->call([$this, 'edit'], [
             'model' => $this->model,
+            'params' => [
+                'return_url' => $this->return_url
+            ]
         ]);
 
         if (is_array($detailData)) {

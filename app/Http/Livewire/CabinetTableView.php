@@ -2,6 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Actions\DeleteCabinetAction;
+use App\Actions\DeleteCabinetsAction;
+use App\Models\Cabinet;
+use LaravelViews\Actions\Action;
 use LaravelViews\Views\TableView;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\UserAdmin;
@@ -14,43 +18,51 @@ use App\Actions\DeleteUsersAction;
 use LaravelViews\Views\Traits\WithAlerts;
 use App\Filters\UsersActiveFilter;
 use LaravelViews\Actions\RedirectAction;
+use LaravelViews\Views\View;
 
 class CabinetTableView extends TableView
 {
     use WithAlerts;
 
     protected $num = 1;
-    protected $model = UserAdmin::class;
+    protected $model = Cabinet::class;
 
     protected $paginate = 20;
 
-    public $searchBy = ['name', 'phone'];
+    public $searchBy = ['users.name', 'users.phone'];
 
     public function headers(): array
     {
         return [
             '#',
             //Header::title('ID')->sortBy('id'),
-            Header::title('ФИО')->sortBy('name'),
-            Header::title('Телефон')->sortBy('phone'),
-            Header::title('Дата окончания')->sortBy('cabinet.finish_at'),
+            Header::title('ФИО')->sortBy('users.name'),
+            Header::title('Телефон')->sortBy('users.phone'),
+            Header::title('Дата окончания')->sortBy('finish_at'),
+            Header::title('Продлить работу кабинета'),
         ];
     }
 
-    public function row(UserAdmin $user)
+    public function row(Cabinet $cabinet)
     {
         return [
             ($this->page -  1) * $this->paginate + $this->num++,
             //$user->id,
-            UI::link($user->name, route('cabinet-edit', $user)), //$user->name,
+            UI::link($cabinet->user->name, route('cabinet-edit', $cabinet->id)), //$user->name,
             //UI::editable($user, 'email'),
             //$user->email,
-            //$user->phone,
-            UI::editable($user, 'phone'),
+            //$cabinet->user->phone,
+            UI::editable($cabinet, 'phone'),
             //$user->status ? UI::icon('check', 'success') : '',
             //$user->created_at,
             //$user->updated_at
-            @$user->finish_at,
+            @$cabinet->finish_at,
+
+            '<a href="'.route('cabinet-plus', $cabinet->id).'?plus=1">'.UI::badge('месяц').'</a> '.
+            '<a href="'.route('cabinet-plus', $cabinet->id).'?plus=3">'.UI::badge('3 месяца').'</a> '.
+            '<a href="'.route('cabinet-plus', $cabinet->id).'?plus=6">'.UI::badge('6 месяцев').'</a> '.
+            '<a href="'.route('cabinet-plus', $cabinet->id).'?plus=9">'.UI::badge('9 месяцев').'</a> '.
+            '<a href="'.route('cabinet-plus', $cabinet->id).'?plus=12">'.UI::badge('год').'</a> '
         ];
     }
 
@@ -61,19 +73,21 @@ class CabinetTableView extends TableView
      */
     public function repository(): Builder
     {
-        //return UserAdmin::query();
-        return UserAdmin::query()
+        //return Cabinet::query();
+        /*return UserAdmin::query()
             ->join('cabinet', 'users.id', '=', 'cabinet.user_id')
             ->where('id_cms_privileges', 3)
-            ->applyScopes();
+            ->applyScopes();*/
+        return Cabinet::query()->select(['cabinet.*', 'users.name', 'users.phone'])->join('users', 'users.id', '=', 'cabinet.user_id')->applyScopes();
     }
 
     /** For actions by item */
     protected function actionsByRow()
     {
         return [
-            new ActivateUserAction('shield', 'Продлить', 'shield'),
-            new DeleteUserAction,
+            //new ActivateUserAction('shield', 'Продлить', 'shield'),
+            //new DeleteUserAction(),
+            new DeleteCabinetAction(),
             //new RedirectAction('cabinets', 'Просмотр', 'eye'),
         ];
     }
@@ -82,8 +96,9 @@ class CabinetTableView extends TableView
     protected function bulkActions()
     {
         return [
-            new ActivateUsersAction,
-            new DeleteUsersAction,
+            //new ActivateUsersAction,
+            //new DeleteUsersAction(),
+            new DeleteCabinetsAction(),
         ];
     }
 
@@ -92,16 +107,25 @@ class CabinetTableView extends TableView
      * gets the model instance and a key-value array
      * with the modified dadta
      */
-    public function update(UserAdmin $user, $data)
+    public function update(Cabinet $cabinet, $data)
     {
-        $user->update($data);
-        $this->success();
+        if (isset($data['phone'])) {
+            $cabinet->users->phone = $data['phone'];
+            try {
+                if ($cabinet->users->save()) $this->success('Телефон сохранен!');
+                else $this->error('Не удались сохранить телефон!');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+
+        }
+        //$user->update($data);
     }
 
     protected function filters()
     {
         return [
-            new UsersActiveFilter,
+            //new UsersActiveFilter,
             //new CreatedFilter,
             //new UsersTypeFilter
         ];

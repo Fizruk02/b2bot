@@ -9,6 +9,8 @@ class Cabinet extends Model
 {
     protected $table = 'cabinet';
 
+    public $timestamps = false;
+
     use HasFactory;
 
     /**
@@ -17,5 +19,13 @@ class Cabinet extends Model
     public function user()
     {
         return $this->belongsTo(UserAdmin::class);
+    }
+
+    /**
+     * Get the user that owns the cabinet.
+     */
+    public function users()
+    {
+        return $this->belongsTo(UserAdmin::class, 'user_id', 'id');
     }
 }

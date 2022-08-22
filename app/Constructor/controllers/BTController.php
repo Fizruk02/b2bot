@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ViewErrorBag;
 use Maatwebsite\Excel\Facades\Excel;
 use Schema;
 
@@ -852,9 +853,9 @@ class BTController extends Controller
 
     public function validation($id = null)
     {
-
         $request_all = Request::all();
         $array_input = [];
+
         foreach ($this->data_inputan as $di) {
             $ai = [];
             $name = $di['name'];
@@ -915,6 +916,11 @@ class BTController extends Controller
                 }
             }
 
+            if (@$di['type'] == 'password') {
+                dump($request_all);
+                dump($this->data_inputan);
+            }
+
             if (@$di['validation']) {
 
                 $exp = explode('|', $di['validation']);
@@ -922,9 +928,9 @@ class BTController extends Controller
                     foreach ($exp as &$validationItem) {
                         if (substr($validationItem, 0, 6) == 'unique') {
                             $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
-                            $uniqueTable = ($parseUnique[0]) ?: $this->table;
-                            $uniqueColumn = ($parseUnique[1]) ?: $name;
-                            $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
+                            $uniqueTable = (@$parseUnique[0]) ?: $this->table;
+                            $uniqueColumn = (@$parseUnique[1]) ?: $name;
+                            $uniqueIgnoreId = (@$parseUnique[2]) ?: (($id) ?: '');
 
                             //Make sure table name
                             $uniqueTable = BT::parseSqlTable($uniqueTable)['table'];
@@ -962,11 +968,13 @@ class BTController extends Controller
         }
 
         $validator = Validator::make($request_all, $array_input);
-
         if ($validator->fails()) {
+//dump('START');
             $message = $validator->messages();
             $message_all = $message->all();
-
+//dump($validator);
+//dump($message);
+//dd($message_all);
             if (Request::ajax()) {
                 $res = response()->json([
                     'message' => cbLang('alert_validation_error', ['error' => implode(', ', $message_all)]),
@@ -974,8 +982,34 @@ class BTController extends Controller
                 ])->send();
                 exit;
             } else {
-                $res = redirect()->back()->with("errors", $message)->with([
+                /*$errors = new ViewErrorBag();
+                foreach ($message->toArray() as $key => $msg) {
+                    dump($key);
+                    dump($msg);
+                    dump($message->first());
+                    $errors->put($key, $message);
+                    $errors->put($key, $message->first());
+                }
+                dump('getMessage');
+                dump($message->getMessages());
+                dump('errors');
+                dump($errors);
+                dump('first');
+                dump($errors->first('name'));
+                dump('message');
+                dump($message);
+                dd();*/
+                $errors = new ViewErrorBag();
+                $errors->put('default', $message);
+                //dd($errors->first());
+                //$message->toArray()
+                //die('aaa');
+                /*$res = redirect()->back()->with("errors", $message->toArray())->with([
                     'message' => cbLang('alert_validation_error', ['error' => implode(', ', $message_all)]),
+                    'message_type' => 'warning',
+                ])->withInput();*/
+                $res = redirect()->back()->with("errors", $errors)->with([
+                    'message' => cbLang('alert_validation_error', ['errors' => implode(', ', $message_all)]),
                     'message_type' => 'warning',
                 ])->withInput();
                 \Session::driver()->save();
@@ -1121,9 +1155,16 @@ class BTController extends Controller
 
         $page_title = cbLang("add_data_page_title", ['module' => BTBooster::getCurrentModule()->name]);
         $page_menu = Route::getCurrentRoute()->getActionName();
-        $command = 'add';
+        //$command = 'add';
+        $command = null;
+        $return_url = $this->return_url;
 
-        return view('crudbooster::default.form', compact('page_title', 'page_menu', 'command'));
+        return view(
+            config("crudbooster.ADMIN_PATH") ? 'crudbooster::default.form' : 'crudbooster::include.form',
+            compact('page_menu', 'page_title', 'command', 'return_url')
+        );
+
+        //return view('crudbooster::default.form', compact('page_title', 'page_menu', 'command'));
     }
 
     public function postAddSave()
@@ -1163,7 +1204,7 @@ class BTController extends Controller
             $inputdata = request($name);
 
             //Insert Data Checkbox if Type Datatable
-            if ($ro['type'] == 'checkbox') {
+            if (@$ro['type'] == 'checkbox') {
                 if ($ro['relationship_table']) {
                     $datatable = explode(",", $ro['datatable'])[0];
                     $foreignKey2 = BTBooster::getForeignKey($datatable, $ro['relationship_table']);
@@ -1183,7 +1224,7 @@ class BTController extends Controller
                 }
             }
 
-            if ($ro['type'] == 'select2') {
+            if (@$ro['type'] == 'select2') {
                 if (@$ro['relationship_table']) {
                     $datatable = explode(",", $ro['datatable'])[0];
                     $foreignKey2 = BTBooster::getForeignKey($datatable, $ro['relationship_table']);
@@ -1201,7 +1242,7 @@ class BTController extends Controller
                 }
             }
 
-            if ($ro['type'] == 'child') {
+            if (@$ro['type'] == 'child') {
                 $name = str_slug($ro['label'], '');
                 $columns = $ro['columns'];
                 $getColName = request($name.'-'.$columns[0]['name']);
@@ -1253,6 +1294,9 @@ class BTController extends Controller
 
     public function getEdit($id)
     {
+        //$this->return_url = redirect()->back()->getTargetUrl();
+        //dump($this->return_url);
+
         $this->cbLoader();
         $row = DB::table($this->table)->where($this->primary_key, $id)->first();
 
@@ -1268,11 +1312,12 @@ class BTController extends Controller
         $page_menu = Route::getCurrentRoute()->getActionName();
         $page_title = cbLang("edit_data_page_title", ['module' => BTBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
+        $return_url = $this->return_url;
         Session::put('current_row_id', $id);
 
         return view(
             config("crudbooster.ADMIN_PATH") ? 'crudbooster::default.form' : 'crudbooster::include.form',
-            compact('id', 'row', 'page_menu', 'page_title', 'command')
+            compact('id', 'row', 'page_menu', 'page_title', 'command', 'return_url')
         );
     }
 
@@ -1396,17 +1441,17 @@ class BTController extends Controller
         //insert log
         $old_values = json_decode(json_encode($row), true);
         BTBooster::insertLog(cbLang("log_update", [
-            'name' => $this->arr[$this->title_field],
+            'name' => @$this->arr[$this->title_field],
             'module' => BTBooster::getCurrentModule()->name,
         ]), LogsController::displayDiff($old_values, $this->arr));
 
         if ($this->return_url) {
-            BTBooster::redirect($this->return_url, cbLang("alert_update_data_success"), 'success');
+            return BTBooster::redirect($this->return_url, cbLang("alert_update_data_success"), 'success');
         } else {
             if (request('submit') == cbLang('button_save_more')) {
-                BTBooster::redirect(BTBooster::mainpath('add'), cbLang("alert_update_data_success"), 'success');
+                return BTBooster::redirect(BTBooster::mainpath('add'), cbLang("alert_update_data_success"), 'success');
             } else {
-                BTBooster::redirect(BTBooster::mainpath(), cbLang("alert_update_data_success"), 'success');
+                return BTBooster::redirect(BTBooster::mainpath(), cbLang("alert_update_data_success"), 'success');
             }
         }
     }

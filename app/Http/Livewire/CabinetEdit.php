@@ -19,6 +19,7 @@ class CabinetEdit extends EditView
 
     public function heading(\App\Models\Cabinet $model)
     {
+        //$name = $model->id ? $model->user->name : '';
         return [
             //'', ''
             "Кабинет {$model->user->name}",
@@ -30,7 +31,7 @@ class CabinetEdit extends EditView
      * @param $model Model instance
      * @return Array Array with all the edit data or the components
      */
-    public function edit($model)
+    public function edit($model, $params)
     {
         /*return [
             'Имя' => $model->name,
@@ -42,6 +43,7 @@ class CabinetEdit extends EditView
 
         $cUser = new AdminCmsUsersController();
         $cUser->cbInit();
+        $cUser->return_url = $params['return_url'];
         //dd($cUser->getProfile());
         /*Route::get('/', function (\Illuminate\Http\Request $request) {
             return '';
@@ -60,8 +62,13 @@ class CabinetEdit extends EditView
         //dd(config("crudbooster.ADMIN_PATH"));
         config(['crudbooster.ADMIN_PATH' => '']);
 
-        if(Request::method() == 'POST') return $cUser->postEditSave($model->user_id);
-        return $cUser->getEdit($model->user_id)->render();
+        if ($model->user_id) {
+            if(Request::method() == 'POST') return $cUser->postEditSave($model->user_id);
+            return $cUser->getEdit($model->user_id)->render();
+        } else {
+            if(Request::method() == 'POST') return $cUser->postAddSave($model->user_id);
+            return $cUser->getAdd($model->user_id)->render();
+        }
 
         /*$id = $model->user_id;
         $row = $model;

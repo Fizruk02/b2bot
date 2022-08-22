@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Support\Facades\Route;
+
 /**
  * @var $title string
  * @var $live string
@@ -7,7 +9,10 @@
  * @var $model Object
  */
 if (empty($model)) $html = \Livewire\Livewire::mount($live, [])->html();
-else $html = \Livewire\Livewire::mount($live, ['model' => $model->id])->html();
+else $html = \Livewire\Livewire::mount($live, [
+        'model' => $model,
+        'return_url' => '/'.Route::getRoutes()->getByName($route)->uri
+    ])->html();
 //$html = \Livewire\Livewire::mount('user-detail-view', ['model' => 1])->html();
 //$liveware = '<livewire:cabinet-table-view />';
 ?>
@@ -18,6 +23,20 @@ else $html = \Livewire\Livewire::mount($live, ['model' => $model->id])->html();
         </h2>
 
     </x-slot>
+
+    @if (session()->has('success'))
+        <div class="py-8 bg-green-100" id="result-time">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <h2 class="font-semibold text-xl text-green-800 leading-tight">{{ session('success') }}</h2>
+            </div>
+        </div>
+        <script>
+            setTimeout(function(){
+                document.getElementById('result-time').style.display = 'none';
+            }, 5000);
+        </script>
+    @endif
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden overflow-hidden shadow-xl sm:rounded-lg">

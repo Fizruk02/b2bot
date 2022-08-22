@@ -30,9 +30,7 @@ class ListAction extends Action
      */
     public function handle(WebPages $model, View $view)
     {
-        dd($model);
         $segments = request()->segments();
-        dd($segments);
         unset($segments[count($segments) - 1]);
         unset($segments[count($segments) - 1]);
         return redirect()->to(implode('/', $segments));

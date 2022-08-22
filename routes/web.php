@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,14 +38,13 @@ Route::middleware([
         return view('liveware', [
             'title' => 'Личные кабинеты',
             'live' => 'cabinet-table-view',
-            'route' => 'cabinet-new',
+            'route' => 'cabinet-add',
             'name' => 'Создать'
         ]);
         //return redirect('/home');
     })->name('cabinets');
 
     Route::get('/cabinets/edit/{cabinet}', function (\App\Models\Cabinet $cabinet) {
-        //dd($cabinet);
         //dump(Auth::user());
         //return view('crudbooster::home');
         return view('liveware', [
@@ -58,6 +58,7 @@ Route::middleware([
     })->scopeBindings()->name('cabinet-edit');
 
     Route::post('/cabinets/edit/{cabinet}', function (\App\Models\Cabinet $cabinet) {
+        //dd($cabinet);
         //dump(Auth::user());
         //return view('crudbooster::home');
         return view('liveware', [
@@ -70,14 +71,37 @@ Route::middleware([
         //return redirect('/home');
     })->scopeBindings()->name('cabinet-edit');
 
+    Route::get('/cabinets/plus/{cabinet}', function (\App\Models\Cabinet $cabinet) {
+        $dateAt = strtotime('+'.request()->get('plus').' MONTH', strtotime($cabinet->finish_at));
+        $cabinet->finish_at = date('Y-m-d H:i:s', $dateAt);
+        $cabinet->save();
+        session()->flash('success', 'Кабинет '.$cabinet->name.' продлен.');
+        return redirect()->back();
+    })->name('cabinet-plus');
+
     Route::get('/cabinets/add', function () {
+        $cabinet = new \App\Models\Cabinet();
+        $cabinet->user = new \App\Models\UserAdmin();
         return view('liveware', [
-            'title' => 'Личные кабинеты',
-            'model' => 'cabinet-table-view',
+            'title' => 'Новый кабинет',
+            'live' => 'cabinet-edit',
             'route' => 'cabinets',
-            'name' => 'Вернуться'
+            'name' => 'Вернуться',
+            'model' => $cabinet,
         ]);
-    })->name('cabinet-new');
+    })->name('cabinet-add');
+
+    Route::post('/cabinets/add', function () {
+        $cabinet = new \App\Models\Cabinet();
+        $cabinet->user = new \App\Models\UserAdmin();
+        return view('liveware', [
+            'title' => 'Новый кабинет',
+            'live' => 'cabinet-edit',
+            'route' => 'cabinets',
+            'name' => 'Вернуться',
+            'model' => $cabinet,
+        ]);
+    })->name('cabinet-add');
 
     //dump(__('Search'));
     //dump(Auth::user());
