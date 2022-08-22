@@ -103,6 +103,161 @@ Route::middleware([
         ]);
     })->name('cabinet-add');
 
+    Route::get('/statictics', function () {
+        return view('liveware', [
+            'title' => 'Статистика',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => new \App\Models\WebPages(),
+        ]);
+    })->name('statictics');
+
+    Route::get('/users', function () {
+        $page = new \App\Models\WebPages();
+        $page->params = [
+            'cur' => 0,
+            'buttons' => [
+                ['name' => 'Все пользователи', 'link' => '/users'],
+                ['name' => 'Забанненые пользователи', 'link' => '/users-ban'],
+                ['name' => 'Черный список', 'link' => '/users-black']
+            ],
+        ];
+        return view('liveware', [
+            'title' => 'Пользователи',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('users');
+
+    Route::get('/users-ban', function () {
+        $page = new \App\Models\WebPages();
+        $page->params = [
+            'cur' => 1,
+            'buttons' => [
+                ['name' => 'Все пользователи', 'link' => '/users'],
+                ['name' => 'Забанненые пользователи', 'link' => '/users-ban'],
+                ['name' => 'Черный список', 'link' => '/users-black']
+            ],
+        ];
+        return view('liveware', [
+            'title' => 'Забанненые пользователи',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('users-ban');
+
+    Route::get('/users-black', function () {
+        $page = new \App\Models\WebPages();
+        $page->params = [
+            'cur' => 2,
+            'buttons' => [
+                ['name' => 'Все пользователи', 'link' => '/users'],
+                ['name' => 'Забанненые пользователи', 'link' => '/users-ban'],
+                ['name' => 'Черный список', 'link' => '/users-black']
+            ],
+        ];
+        return view('liveware', [
+            'title' => 'Черный список',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('users-black');
+
+
+
+
+
+
+
+
+
+
+
+    Route::get('/request', function () {
+        $page = new \App\Models\WebPages();
+        return view('liveware', [
+            'title' => 'Заявки',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('request');
+
+    Route::get('/orders', function () {
+        $page = new \App\Models\WebPages();
+        return view('liveware', [
+            'title' => 'Заказы',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('orders');
+
+    Route::get('/employees', function () {
+        $page = new \App\Models\WebPages();
+        return view('liveware', [
+            'title' => 'Сотрудники',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('employees');
+
+    Route::get('/clients', function () {
+        $page = new \App\Models\WebPages();
+        return view('liveware', [
+            'title' => 'Клиенты',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('clients');
+
+    Route::get('/news', function () {
+        $page = new \App\Models\WebPages();
+        return view('liveware', [
+            'title' => 'Новости',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('news');
+
+
+    Route::get('/accounting', function () {
+        $page = new \App\Models\WebPages();
+        return view('liveware', [
+            'title' => 'Бухгалтерия',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('accounting');
+
+    Route::get('/settings', function () {
+        $page = new \App\Models\WebPages();
+        return view('liveware', [
+            'title' => 'Настройки',
+            'live' => 'page',
+            'route' => 'dashboard',
+            'name' => 'Главная',
+            'model' => $page,
+        ]);
+    })->name('settings');
+
     //dump(__('Search'));
     //dump(Auth::user());
 
