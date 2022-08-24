@@ -16,7 +16,7 @@ class UsersActiveFilter extends Filter
      */
     public function apply(Builder $query, $value, $request)
     {
-        return $query->where('status', $value);
+        return $query->where('users.status', $value);
     }
 
     /**
@@ -27,8 +27,10 @@ class UsersActiveFilter extends Filter
     public function options()
     {
         return [
-            'Active' => 1,
-            'Disabled' => 0,
+            'Активные' => 0,
+            'Новые' => -1,
+            'Черный список' => -10,
+            'Заблокированные' => -20,
         ];
     }
 }
