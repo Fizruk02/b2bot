@@ -78,7 +78,9 @@ class CabinetTableView extends TableView
             ->join('cabinet', 'users.id', '=', 'cabinet.user_id')
             ->where('id_cms_privileges', 3)
             ->applyScopes();*/
-        return Cabinet::query()->select(['cabinet.*', 'users.name', 'users.phone'])->join('users', 'users.id', '=', 'cabinet.user_id')->applyScopes();
+        return Cabinet::query()->select(['cabinet.*', 'users.name', 'users.phone'])
+            ->join('users', 'users.id', '=', 'cabinet.users_id')
+            ->applyScopes();
     }
 
     /** For actions by item */

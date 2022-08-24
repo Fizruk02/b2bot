@@ -55,7 +55,7 @@ class EmployeesTableView extends TableView
             ->where('users.id_cms_privileges', 2)
             ->join('users_profiles', 'users.id', '=', 'users_profiles.users_id')
             ->join('cabinet', 'users.cabinet_id', '=', 'cabinet.id')
-            ->join('users as admin', 'cabinet.user_id', '=', 'admin.id')
+            ->join('users as admin', 'cabinet.users_id', '=', 'admin.id')
             ->applyScopes();
     }
 

@@ -141,6 +141,24 @@ Route::middleware([
         }
     })->name('employees_generate');
 
+    Route::get('/cabinet_generate', function () {
+        $fields = \App\Models\OrdersFields::query()->whereRaw('cabinet_id IS NULL')->orderBy('sort')->get();
+        //dd($fields);
+        $cabinets = \App\Models\Cabinet::all();
+        foreach ($cabinets as $cab) {
+            dump($cab->toArray());
+            foreach ($fields as $f) {
+                //dd($f);
+                $data = $f->toArray();
+                $data['id'] = null;
+                $data['cabinet_id'] = $cab->id;
+                \App\Models\OrdersFields::insertGetId($data);
+                //$id = DB::table($f->table)->insertGetId($data);
+                dump($f->toArray());
+            }
+        }
+    })->name('cabinet_generate');
+
     Route::get('/dashboard', function () {
         //dump(Auth::user());
         //return view('crudbooster::home');

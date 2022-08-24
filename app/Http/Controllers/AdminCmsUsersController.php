@@ -69,8 +69,16 @@ class AdminCmsUsersController extends BTController {
 
     public function hook_after_add($id) {
         $cabinet = new Cabinet();
-        $cabinet->user_id = $id;
+        $cabinet->users_id = $id;
         $cabinet->finish_at = date('Y-m-d H:i:s');
         $cabinet->save();
+
+        $fields = \App\Models\OrdersFields::query()->whereRaw('cabinet_id IS NULL')->orderBy('sort')->get();
+        foreach ($fields as $f) {
+            $data = $f->toArray();
+            $data['id'] = null;
+            $data['cabinet_id'] = $cabinet->id;
+            \App\Models\OrdersFields::insertGetId($data);
+        }
     }
 }
