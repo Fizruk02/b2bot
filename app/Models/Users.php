@@ -10,13 +10,15 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Users extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    public $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -73,7 +75,15 @@ class User extends Authenticatable
      */
     public function users_profiles()
     {
-        return $this->belongsTo(UsersProfiles::class, 'users_id', 'id');
+        return $this->belongsTo(UsersProfiles::class, 'id', 'users_id');
+    }
+
+    /**
+     * Get the user that owns the cabinet.
+     */
+    public function users()
+    {
+        return $this->belongsTo(Users::class, 'id', 'id');
     }
 
 }

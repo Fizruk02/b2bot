@@ -22,7 +22,7 @@ class CabinetEdit extends EditView
         //$name = $model->id ? $model->user->name : '';
         return [
             //'', ''
-            "Кабинет {$model->user->name}",
+            "Кабинет {$model->users->name}",
             "Профиль администратора",
         ];
     }

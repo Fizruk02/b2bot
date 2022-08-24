@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Str;
+use Tests\TestCase;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +22,124 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+    Route::get('/employees_generate', function () {
+        $fs = [
+            'Зайцев', 'Зайцева', 'Лисицын', 'Волков', 'Медведев', 'Куницын', 'Сапожников', 'Лосев', 'Жирафов', 'Зебрин',
+            'Обезьянов', 'Волчков', 'Белкин', 'Ослов', 'Лошадкин', 'Коровин', 'Собакин', 'Кошкин', 'Крысин'
+        ];
+        $ns = [
+            'Андрей', 'Алексей', 'Иван', 'Василий', 'Федор', 'Роман', 'Сергей', 'Марат', 'Ринат', 'Дмитрий', 'Ив',
+            'Ростислав', 'Ярослав', 'Евгений', 'Михаил', 'Альберт', 'Кузьма', 'Илья', 'Данил', 'Ришат', 'Джон',
+            'Арнольд', 'Джорж', 'Юрий', 'Нурым'
+        ];
+        $os = [
+            'Андреевич', 'Алексеевич', 'Иванович', 'Васильевич', 'Федорович', 'Романович', 'Сергеич', 'Маратович',
+            'Ринатович', 'Дмитриевич', 'Ивич', 'Ростиславович', 'Ярославович', 'Евгеньевич', 'Михайлович', 'Альбертович',
+            'Кузьмич', 'Ильич', 'Данилович', 'Ришатович', 'Джонсович',
+            'Арнольдович', 'Джоржович', 'Юриьевич', 'Нурымович'
+        ];
+        for ($u = 0; $u < 100; $u++) {
+            $f = $fs[rand(0, count($fs)-1)];
+            $i = $ns[rand(0, count($ns)-1)];
+            $o = $os[rand(0, count($os)-1)];
+            $fio = $f.' '.$i.' '.$o;
+            $status = [-1,0,0,0,-10, -20];
+            $cabinet = [1,3,6,9];
+
+            $gen = new \Faker\Generator();
+            $user = \App\Models\User::factory(1)->create([
+                'status' => $status[rand(0, count($status) - 1)],
+                'name' => $fio,
+                'id_cms_privileges' => 2,
+                'cabinet_id' => $cabinet[rand(0, count($cabinet) - 1)],
+                'is_deleted' => rand(0, 10) == 9 ? 1 : 0,
+                'phone' => $gen->numberBetween(70000000000, 79999999999),
+            ]);
+            $profile = new \App\Models\UsersProfiles();
+            $is_worker = rand(0, 5) == 4 ? 1 : 0;
+            $special = [
+                '',
+                'Дворник',
+                'Верстальщик',
+                'Носильщик',
+                'Программист',
+                'Тестировщик',
+                'Директор',
+                'Начальника',
+                'Грузчик',
+                'Экономист',
+                'Водитель',
+            ];
+            $children = [
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '-',
+                'нет',
+                'двое',
+                'сын',
+                'дочь',
+                'сын и дочь',
+                'трое',
+            ];
+            $experience = [
+                '',
+                '-',
+                'нет',
+                'год',
+                '5 лет',
+                'с рождения',
+                'всю жизнь',
+            ];
+            $district = [
+                '',
+                'Южный',
+                'Северный',
+                'Западный',
+                'Восточный',
+                'Центральный'
+            ];
+            $comment = [
+                '',
+                'Прогуливает',
+                'Плохой работник',
+                'Хилый',
+                'Редко ходит',
+                'Бухает',
+                'Часто болеет',
+                'Хороший работник',
+                'Молодец',
+            ];
+            $city = ['Москва', 'Питер'];
+
+            $id = DB::table('users_profiles')->insertGetId([
+                //'id' => null,
+                'users_id' => $user[0]->id,
+                'f' => $f,
+                'i' => $i,
+                'o' => $o,
+                'birthday_at' => rand(335883944, 1661259945),
+                'special' => $special[rand(0, count($special) - 1)],
+                'is_rf' => rand(0, 10) == 9 ? 1 : 0,
+                'is_worker' => $is_worker,
+                'work' => $is_worker ? rand(8,12).' '.rand(15,20) : '',
+                'family' => rand(0,1),
+                'children' => $children[rand(0, count($children) - 1)],
+                'times' => rand(8,12).' '.rand(15,20),
+                'experience' => $experience[rand(0, count($experience) - 1)],
+                'is_criminal' => rand(0, 10) == 9 ? 1 : 0,
+                'is_car' => rand(0, 2) == 1 ? 1 : 0,
+                'city' => $city[rand(0, count($city) - 1)],
+                'district' => $district[rand(0, count($district) - 1)],
+                'passport' => $gen->numberBetween(10, 99).' '.$gen->numberBetween(10, 99).' '.$gen->numberBetween(100000, 999999),
+                'snils' => $gen->numberBetween(100, 999).' '.$gen->numberBetween(100, 999).' '.$gen->numberBetween(100, 999).' '.$gen->numberBetween(10, 99),
+                'comment' => $comment[rand(0, count($comment) - 1)],
+            ]);
+        }
+    })->name('employees_generate');
 
     Route::get('/dashboard', function () {
         //dump(Auth::user());
@@ -48,7 +168,7 @@ Route::middleware([
         //dump(Auth::user());
         //return view('crudbooster::home');
         return view('liveware', [
-            'title' => 'Кабинет: '.$cabinet->user->name,
+            'title' => 'Кабинет: '.$cabinet->users->name,
             'live' => 'cabinet-edit',
             'route' => 'cabinets',
             'name' => 'Вернуться',
@@ -62,7 +182,7 @@ Route::middleware([
         //dump(Auth::user());
         //return view('crudbooster::home');
         return view('liveware', [
-            'title' => 'Кабинет: '.$cabinet->user->name,
+            'title' => 'Кабинет: '.$cabinet->users->name,
             'live' => 'cabinet-edit',
             'route' => 'cabinets',
             'name' => 'Вернуться',
@@ -75,13 +195,13 @@ Route::middleware([
         $dateAt = strtotime('+'.request()->get('plus').' MONTH', strtotime($cabinet->finish_at));
         $cabinet->finish_at = date('Y-m-d H:i:s', $dateAt);
         $cabinet->save();
-        session()->flash('success', 'Кабинет '.$cabinet->name.' продлен.');
+        session()->flash('success', 'Кабинет '.$cabinet->users->name.' продлен.');
         return redirect()->back();
     })->name('cabinet-plus');
 
     Route::get('/cabinets/add', function () {
         $cabinet = new \App\Models\Cabinet();
-        $cabinet->user = new \App\Models\UserAdmin();
+        $cabinet->users = new \App\Models\UserAdmin();
         return view('liveware', [
             'title' => 'Новый кабинет',
             'live' => 'cabinet-edit',
@@ -93,7 +213,7 @@ Route::middleware([
 
     Route::post('/cabinets/add', function () {
         $cabinet = new \App\Models\Cabinet();
-        $cabinet->user = new \App\Models\UserAdmin();
+        $cabinet->users = new \App\Models\UserAdmin();
         return view('liveware', [
             'title' => 'Новый кабинет',
             'live' => 'cabinet-edit',
@@ -125,7 +245,7 @@ Route::middleware([
         ];
         return view('liveware', [
             'title' => 'Пользователи',
-            'live' => 'page',
+            'live' => 'employees-table-view',
             'route' => 'dashboard',
             'name' => 'Главная',
             'model' => $page,

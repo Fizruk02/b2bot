@@ -48,7 +48,7 @@ class CabinetTableView extends TableView
         return [
             ($this->page -  1) * $this->paginate + $this->num++,
             //$user->id,
-            UI::link($cabinet->user->name, route('cabinet-edit', $cabinet->id)), //$user->name,
+            UI::link($cabinet->users->name, route('cabinet-edit', $cabinet->id)), //$user->name,
             //UI::editable($user, 'email'),
             //$user->email,
             //$cabinet->user->phone,
@@ -125,7 +125,7 @@ class CabinetTableView extends TableView
     protected function filters()
     {
         return [
-            new UsersActiveFilter,
+            //new UsersActiveFilter,
             //new CreatedFilter,
             //new UsersTypeFilter
         ];

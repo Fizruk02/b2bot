@@ -16,16 +16,8 @@ class Cabinet extends Model
     /**
      * Get the user that owns the cabinet.
      */
-    public function user()
-    {
-        return $this->belongsTo(UserAdmin::class);
-    }
-
-    /**
-     * Get the user that owns the cabinet.
-     */
     public function users()
     {
-        return $this->belongsTo(UserAdmin::class, 'user_id', 'id');
+        return $this->belongsTo(Users::class, 'user_id', 'id');
     }
 }

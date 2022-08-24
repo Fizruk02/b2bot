@@ -24,15 +24,18 @@ class UsersTableView extends TableView
 
     protected $paginate = 20;
 
-    public $searchBy = ['name', 'email'];
+    public $searchBy = ['name', 'phone'];
 
     public function headers(): array
     {
         return [
             '#',
             //Header::title('ID')->sortBy('id'),
-            Header::title('Name')->sortBy('name'),
-            Header::title('Email')->sortBy('email'),
+            Header::title('ФИО')->sortBy('name'),
+            Header::title('Телефон')->sortBy('phone'),
+            Header::title('Администратор')->sortBy('phone'),
+            Header::title('Город')->sortBy('phone'),
+            Header::title('Комментарий')->sortBy('phone'),
             Header::title('Статус')->sortBy('status'),
         ];
     }
@@ -55,7 +58,10 @@ class UsersTableView extends TableView
             ($this->page -  1) * $this->paginate + $this->num++,
             //$user->id,
             UI::link($user->name, route('cabinets', $user)).' '.UI::badge($role, $class), //$user->name,
-            UI::editable($user, 'email'),
+            UI::editable($user, 'phone'),
+            UI::editable($user, 'phone'),
+            UI::editable($user, 'phone'),
+            UI::editable($user, 'phone'),
             //$user->email,
             $user->status ? UI::icon('check', 'success') : '',
             //$model->created_at,
