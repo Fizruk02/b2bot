@@ -7,6 +7,8 @@ use LaravelViews\Filters\Filter;
 
 class UsersActiveFilter extends Filter
 {
+    public $title =  "Статус";
+
     /**
      * Modify the current query when the filter is used
      *
