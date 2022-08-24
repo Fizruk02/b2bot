@@ -31,20 +31,21 @@ CREATE TABLE IF NOT EXISTS `bot` (
 DROP TABLE IF EXISTS `cabinet`;
 CREATE TABLE IF NOT EXISTS `cabinet` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
+  `users_id` int NOT NULL,
   `finish_at` timestamp NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_cabinet_users` (`user_id`),
-  CONSTRAINT `FK_cabinet_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `FK_cabinet_users` (`users_id`) USING BTREE,
+  CONSTRAINT `FK_cabinet_users` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Дамп данных таблицы personal.cabinet: ~3 rows (приблизительно)
-INSERT INTO `cabinet` (`id`, `user_id`, `finish_at`) VALUES
+-- Дамп данных таблицы personal.cabinet: ~6 rows (приблизительно)
+INSERT INTO `cabinet` (`id`, `users_id`, `finish_at`) VALUES
 	(1, 1, '2022-08-24 11:33:59'),
 	(2, 4, '2026-10-18 11:41:39'),
 	(3, 10, '2022-11-18 11:43:22'),
 	(6, 19, '2022-08-22 06:49:45'),
-	(9, 22, '2023-02-22 07:43:53');
+	(9, 22, '2023-02-22 07:43:53'),
+	(11, 257, '2022-08-24 09:37:56');
 
 -- Дамп структуры для таблица personal.cms_apicustom
 DROP TABLE IF EXISTS `cms_apicustom`;
@@ -156,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `cms_logs` (
   PRIMARY KEY (`id`),
   KEY `FK_cms_logs_users` (`id_cms_users`),
   CONSTRAINT `FK_cms_logs_users` FOREIGN KEY (`id_cms_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=364 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=365 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Дамп данных таблицы personal.cms_logs: ~360 rows (приблизительно)
 INSERT INTO `cms_logs` (`id`, `ipaddress`, `useragent`, `url`, `description`, `details`, `id_cms_users`, `created_at`, `updated_at`) VALUES
@@ -522,7 +523,8 @@ INSERT INTO `cms_logs` (`id`, `ipaddress`, `useragent`, `url`, `description`, `d
 	(360, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'http://personal.local/login', 'admin@b2bot.ru логин по IP 127.0.0.1', '', 1, '2022-08-23 06:48:51', NULL),
 	(361, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'http://personal.local/login', 'admin@b2bot.ru логин по IP 127.0.0.1', '', 1, '2022-08-24 03:05:22', NULL),
 	(362, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'http://personal.local/login', 'admin@b2bot.ru логин по IP 127.0.0.1', '', 1, '2022-08-24 03:05:22', NULL),
-	(363, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'http://personal.local/cabinets/edit/1', 'Обновите Петров Петр Петрович в Личные кабинеты', '<table class="table table-striped"><thead><tr><th>Key</th><th>Old Value</th><th>New Value</th></thead><tbody><tr><td>id_chat</td><td></td><td></td></tr><tr><td>status</td><td>99</td><td></td></tr><tr><td>username</td><td></td><td></td></tr><tr><td>first_name</td><td></td><td></td></tr><tr><td>t_date</td><td>2022-07-26 12:29:06</td><td></td></tr><tr><td>t_login</td><td>dev</td><td></td></tr><tr><td>t_password</td><td>$2y$10$cWRNIky5ZJJ7AsqYbLqiX.eGurbg61M7v9ED2RUgOj20ISBH11SoG</td><td></td></tr><tr><td>user_hash</td><td></td><td></td></tr><tr><td>image</td><td></td><td></td></tr><tr><td>role_id</td><td>0</td><td></td></tr><tr><td>email_verified_at</td><td></td><td></td></tr><tr><td>password</td><td>$2y$10$n5ybq0tc9HHzl5RpzfuNXenW9G5mILu9sGD1l3vlJX8BPSYvQUVne</td><td></td></tr><tr><td>remember_token</td><td></td><td></td></tr><tr><td>two_factor_secret</td><td></td><td></td></tr><tr><td>two_factor_recovery_codes</td><td></td><td></td></tr><tr><td>two_factor_confirmed_at</td><td></td><td></td></tr><tr><td>current_team_id</td><td></td><td></td></tr><tr><td>profile_photo_path</td><td></td><td></td></tr><tr><td>id_cms_privileges</td><td>2</td><td></td></tr><tr><td>photo</td><td>uploads/10/2022-08/user_7.jpg</td><td></td></tr><tr><td>cabinet_id</td><td></td><td></td></tr><tr><td>black_at</td><td></td><td></td></tr><tr><td>reiting</td><td>0</td><td></td></tr><tr><td>bot_id</td><td></td><td></td></tr><tr><td>is_deleted</td><td>0</td><td></td></tr></tbody></table>', 1, '2022-08-24 04:23:54', NULL);
+	(363, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'http://personal.local/cabinets/edit/1', 'Обновите Петров Петр Петрович в Личные кабинеты', '<table class="table table-striped"><thead><tr><th>Key</th><th>Old Value</th><th>New Value</th></thead><tbody><tr><td>id_chat</td><td></td><td></td></tr><tr><td>status</td><td>99</td><td></td></tr><tr><td>username</td><td></td><td></td></tr><tr><td>first_name</td><td></td><td></td></tr><tr><td>t_date</td><td>2022-07-26 12:29:06</td><td></td></tr><tr><td>t_login</td><td>dev</td><td></td></tr><tr><td>t_password</td><td>$2y$10$cWRNIky5ZJJ7AsqYbLqiX.eGurbg61M7v9ED2RUgOj20ISBH11SoG</td><td></td></tr><tr><td>user_hash</td><td></td><td></td></tr><tr><td>image</td><td></td><td></td></tr><tr><td>role_id</td><td>0</td><td></td></tr><tr><td>email_verified_at</td><td></td><td></td></tr><tr><td>password</td><td>$2y$10$n5ybq0tc9HHzl5RpzfuNXenW9G5mILu9sGD1l3vlJX8BPSYvQUVne</td><td></td></tr><tr><td>remember_token</td><td></td><td></td></tr><tr><td>two_factor_secret</td><td></td><td></td></tr><tr><td>two_factor_recovery_codes</td><td></td><td></td></tr><tr><td>two_factor_confirmed_at</td><td></td><td></td></tr><tr><td>current_team_id</td><td></td><td></td></tr><tr><td>profile_photo_path</td><td></td><td></td></tr><tr><td>id_cms_privileges</td><td>2</td><td></td></tr><tr><td>photo</td><td>uploads/10/2022-08/user_7.jpg</td><td></td></tr><tr><td>cabinet_id</td><td></td><td></td></tr><tr><td>black_at</td><td></td><td></td></tr><tr><td>reiting</td><td>0</td><td></td></tr><tr><td>bot_id</td><td></td><td></td></tr><tr><td>is_deleted</td><td>0</td><td></td></tr></tbody></table>', 1, '2022-08-24 04:23:54', NULL),
+	(364, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'http://personal.local/cabinets/add', 'Добавьте Хромов Василий Иванович в Личные кабинеты', '', 1, '2022-08-24 09:37:56', NULL);
 
 -- Дамп структуры для таблица personal.cms_menus
 DROP TABLE IF EXISTS `cms_menus`;
@@ -645,7 +647,7 @@ CREATE TABLE IF NOT EXISTS `cms_privileges` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Дамп данных таблицы personal.cms_privileges: ~4 rows (приблизительно)
+-- Дамп данных таблицы personal.cms_privileges: ~5 rows (приблизительно)
 INSERT INTO `cms_privileges` (`id`, `name`, `is_superadmin`, `theme_color`, `created_at`, `updated_at`) VALUES
 	(1, 'Суперадмин', 1, 'skin-red', '2022-08-08 05:51:00', NULL),
 	(2, 'Сотрудник', 0, 'skin-blue', NULL, NULL),
@@ -861,6 +863,7 @@ CREATE TABLE IF NOT EXISTS `orders_fields` (
   `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `type` varchar(50) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `is_first` int DEFAULT '0',
+  `is_accept` int DEFAULT '0',
   `is_2hours` int DEFAULT '0',
   `is_30minutes` int DEFAULT '0',
   `is_require` int DEFAULT '1',
@@ -868,34 +871,113 @@ CREATE TABLE IF NOT EXISTS `orders_fields` (
   PRIMARY KEY (`id`),
   KEY `FK_orders_fields_orders` (`cabinet_id`) USING BTREE,
   CONSTRAINT `FK_orders_fields_cabinet` FOREIGN KEY (`cabinet_id`) REFERENCES `cabinet` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Поля заказа';
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Поля заказа';
 
--- Дамп данных таблицы personal.orders_fields: ~13 rows (приблизительно)
-INSERT INTO `orders_fields` (`id`, `cabinet_id`, `sort`, `name`, `type`, `is_first`, `is_2hours`, `is_30minutes`, `is_require`, `is_visible`) VALUES
-	(1, NULL, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1),
-	(2, NULL, 2, 'Клиент', 'client_name', 0, 0, 0, 1, 1),
-	(3, NULL, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 1, 1),
-	(4, NULL, 4, 'Район', 'district', 0, 0, 0, 1, 1),
-	(5, NULL, 5, 'Улица', 'street', 0, 0, 0, 1, 1),
-	(6, NULL, 6, 'Дом', 'house', 0, 0, 0, 1, 1),
-	(7, NULL, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1),
-	(8, NULL, 8, 'Дата', 'work_day_at', 0, 0, 0, 1, 1),
-	(9, NULL, 10, 'Работников нужно', 'need_employ', 0, 0, 0, 1, 1),
-	(10, NULL, 11, 'Оплата каждому', 'pay_one', 0, 0, 0, 1, 1),
-	(11, NULL, 12, 'Требования', 'requires', 0, 0, 0, 1, 1),
-	(12, NULL, 13, 'Задание (что будем делать)', 'tasks', 0, 0, 0, 1, 1),
-	(15, NULL, 9, 'Время', 'work_time_at', 0, 0, 0, 1, 1);
+-- Дамп данных таблицы personal.orders_fields: ~91 rows (приблизительно)
+INSERT INTO `orders_fields` (`id`, `cabinet_id`, `sort`, `name`, `type`, `is_first`, `is_accept`, `is_2hours`, `is_30minutes`, `is_require`, `is_visible`) VALUES
+	(1, NULL, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1, 1),
+	(2, NULL, 2, 'Клиент', 'client_name', 0, 0, 0, 0, 1, 1),
+	(3, NULL, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 0, 1, 1),
+	(4, NULL, 4, 'Район', 'district', 0, 1, 1, 1, 1, 1),
+	(5, NULL, 5, 'Улица', 'street', 0, 0, 1, 1, 1, 1),
+	(6, NULL, 6, 'Дом', 'house', 0, 0, 0, 1, 1, 1),
+	(7, NULL, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1, 1),
+	(8, NULL, 8, 'Дата', 'work_day_at', 1, 1, 1, 1, 1, 1),
+	(9, NULL, 10, 'Работников нужно', 'need_employ', 0, 1, 1, 1, 1, 1),
+	(10, NULL, 11, 'Оплата каждому', 'pay_one', 0, 1, 1, 1, 1, 1),
+	(11, NULL, 12, 'Требования', 'requires', 0, 1, 1, 1, 1, 1),
+	(12, NULL, 13, 'Задание (что будем делать)', 'tasks', 0, 1, 1, 1, 1, 1),
+	(15, NULL, 9, 'Время', 'work_time_at', 1, 1, 1, 1, 1, 1),
+	(16, 1, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1, 1),
+	(17, 1, 2, 'Клиент', 'client_name', 0, 0, 0, 0, 1, 1),
+	(18, 1, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 0, 1, 1),
+	(19, 1, 4, 'Район', 'district', 0, 1, 1, 1, 1, 1),
+	(20, 1, 5, 'Улица', 'street', 0, 0, 1, 1, 1, 1),
+	(21, 1, 6, 'Дом', 'house', 0, 0, 0, 1, 1, 1),
+	(22, 1, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1, 1),
+	(23, 1, 8, 'Дата', 'work_day_at', 1, 1, 1, 1, 1, 1),
+	(24, 1, 9, 'Время', 'work_time_at', 1, 1, 1, 1, 1, 1),
+	(25, 1, 10, 'Работников нужно', 'need_employ', 0, 1, 1, 1, 1, 1),
+	(26, 1, 11, 'Оплата каждому', 'pay_one', 0, 1, 1, 1, 1, 1),
+	(27, 1, 12, 'Требования', 'requires', 0, 1, 1, 1, 1, 1),
+	(28, 1, 13, 'Задание (что будем делать)', 'tasks', 0, 1, 1, 1, 1, 1),
+	(29, 2, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1, 1),
+	(30, 2, 2, 'Клиент', 'client_name', 0, 0, 0, 0, 1, 1),
+	(31, 2, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 0, 1, 1),
+	(32, 2, 4, 'Район', 'district', 0, 1, 1, 1, 1, 1),
+	(33, 2, 5, 'Улица', 'street', 0, 0, 1, 1, 1, 1),
+	(34, 2, 6, 'Дом', 'house', 0, 0, 0, 1, 1, 1),
+	(35, 2, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1, 1),
+	(36, 2, 8, 'Дата', 'work_day_at', 1, 1, 1, 1, 1, 1),
+	(37, 2, 9, 'Время', 'work_time_at', 1, 1, 1, 1, 1, 1),
+	(38, 2, 10, 'Работников нужно', 'need_employ', 0, 1, 1, 1, 1, 1),
+	(39, 2, 11, 'Оплата каждому', 'pay_one', 0, 1, 1, 1, 1, 1),
+	(40, 2, 12, 'Требования', 'requires', 0, 1, 1, 1, 1, 1),
+	(41, 2, 13, 'Задание (что будем делать)', 'tasks', 0, 1, 1, 1, 1, 1),
+	(42, 3, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1, 1),
+	(43, 3, 2, 'Клиент', 'client_name', 0, 0, 0, 0, 1, 1),
+	(44, 3, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 0, 1, 1),
+	(45, 3, 4, 'Район', 'district', 0, 1, 1, 1, 1, 1),
+	(46, 3, 5, 'Улица', 'street', 0, 0, 1, 1, 1, 1),
+	(47, 3, 6, 'Дом', 'house', 0, 0, 0, 1, 1, 1),
+	(48, 3, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1, 1),
+	(49, 3, 8, 'Дата', 'work_day_at', 1, 1, 1, 1, 1, 1),
+	(50, 3, 9, 'Время', 'work_time_at', 1, 1, 1, 1, 1, 1),
+	(51, 3, 10, 'Работников нужно', 'need_employ', 0, 1, 1, 1, 1, 1),
+	(52, 3, 11, 'Оплата каждому', 'pay_one', 0, 1, 1, 1, 1, 1),
+	(53, 3, 12, 'Требования', 'requires', 0, 1, 1, 1, 1, 1),
+	(54, 3, 13, 'Задание (что будем делать)', 'tasks', 0, 1, 1, 1, 1, 1),
+	(55, 6, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1, 1),
+	(56, 6, 2, 'Клиент', 'client_name', 0, 0, 0, 0, 1, 1),
+	(57, 6, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 0, 1, 1),
+	(58, 6, 4, 'Район', 'district', 0, 1, 1, 1, 1, 1),
+	(59, 6, 5, 'Улица', 'street', 0, 0, 1, 1, 1, 1),
+	(60, 6, 6, 'Дом', 'house', 0, 0, 0, 1, 1, 1),
+	(61, 6, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1, 1),
+	(62, 6, 8, 'Дата', 'work_day_at', 1, 1, 1, 1, 1, 1),
+	(63, 6, 9, 'Время', 'work_time_at', 1, 1, 1, 1, 1, 1),
+	(64, 6, 10, 'Работников нужно', 'need_employ', 0, 1, 1, 1, 1, 1),
+	(65, 6, 11, 'Оплата каждому', 'pay_one', 0, 1, 1, 1, 1, 1),
+	(66, 6, 12, 'Требования', 'requires', 0, 1, 1, 1, 1, 1),
+	(67, 6, 13, 'Задание (что будем делать)', 'tasks', 0, 1, 1, 1, 1, 1),
+	(68, 9, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1, 1),
+	(69, 9, 2, 'Клиент', 'client_name', 0, 0, 0, 0, 1, 1),
+	(70, 9, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 0, 1, 1),
+	(71, 9, 4, 'Район', 'district', 0, 1, 1, 1, 1, 1),
+	(72, 9, 5, 'Улица', 'street', 0, 0, 1, 1, 1, 1),
+	(73, 9, 6, 'Дом', 'house', 0, 0, 0, 1, 1, 1),
+	(74, 9, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1, 1),
+	(75, 9, 8, 'Дата', 'work_day_at', 1, 1, 1, 1, 1, 1),
+	(76, 9, 9, 'Время', 'work_time_at', 1, 1, 1, 1, 1, 1),
+	(77, 9, 10, 'Работников нужно', 'need_employ', 0, 1, 1, 1, 1, 1),
+	(78, 9, 11, 'Оплата каждому', 'pay_one', 0, 1, 1, 1, 1, 1),
+	(79, 9, 12, 'Требования', 'requires', 0, 1, 1, 1, 1, 1),
+	(80, 9, 13, 'Задание (что будем делать)', 'tasks', 0, 1, 1, 1, 1, 1),
+	(81, 11, 1, 'Заголовок', 'title', 1, 1, 1, 1, 1, 1),
+	(82, 11, 2, 'Клиент', 'client_name', 0, 0, 0, 0, 1, 1),
+	(83, 11, 3, 'Телефон клиента', 'client_phone', 0, 0, 0, 0, 1, 1),
+	(84, 11, 4, 'Район', 'district', 0, 1, 1, 1, 1, 1),
+	(85, 11, 5, 'Улица', 'street', 0, 0, 1, 1, 1, 1),
+	(86, 11, 6, 'Дом', 'house', 0, 0, 0, 1, 1, 1),
+	(87, 11, 7, 'Квартира/офис/комментарий', 'room', 0, 0, 0, 1, 1, 1),
+	(88, 11, 8, 'Дата', 'work_day_at', 1, 1, 1, 1, 1, 1),
+	(89, 11, 9, 'Время', 'work_time_at', 1, 1, 1, 1, 1, 1),
+	(90, 11, 10, 'Работников нужно', 'need_employ', 0, 1, 1, 1, 1, 1),
+	(91, 11, 11, 'Оплата каждому', 'pay_one', 0, 1, 1, 1, 1, 1),
+	(92, 11, 12, 'Требования', 'requires', 0, 1, 1, 1, 1, 1),
+	(93, 11, 13, 'Задание (что будем делать)', 'tasks', 0, 1, 1, 1, 1, 1);
 
 -- Дамп структуры для таблица personal.orders_values
 DROP TABLE IF EXISTS `orders_values`;
 CREATE TABLE IF NOT EXISTS `orders_values` (
   `id` int NOT NULL AUTO_INCREMENT,
   `orders_id` int DEFAULT NULL,
-  `sort` int DEFAULT NULL,
-  `name` int DEFAULT NULL,
-  `type` int DEFAULT NULL,
+  `orders_fields_id` int DEFAULT NULL,
+  `value` text COLLATE utf8mb4_general_ci,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `FK_orders_fields_orders` (`orders_id`) USING BTREE,
+  KEY `FK_orders_values_orders_fields` (`orders_fields_id`),
+  CONSTRAINT `FK_orders_values_orders_fields` FOREIGN KEY (`orders_fields_id`) REFERENCES `orders_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `orders_values_ibfk_1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='Поля заказа';
 
@@ -910,7 +992,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Дамп данных таблицы personal.page: ~1 rows (приблизительно)
+-- Дамп данных таблицы personal.page: ~0 rows (приблизительно)
 INSERT INTO `page` (`id`, `url`, `text`) VALUES
 	(1, '/ppp', '<p>ывфпыфвп</p><p>ыфвпыфвп</p><p>ывфпрывфп</p><p>ывфпрыфвпр</p><p><br></p>');
 
@@ -995,9 +1077,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `FK_users_cabinet` (`cabinet_id`),
   KEY `is_deleted` (`is_deleted`),
   CONSTRAINT `FK_users_cabinet` FOREIGN KEY (`cabinet_id`) REFERENCES `cabinet` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=256 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=258 DEFAULT CHARSET=utf8mb3;
 
--- Дамп данных таблицы personal.users: ~105 rows (приблизительно)
+-- Дамп данных таблицы personal.users: ~106 rows (приблизительно)
 INSERT INTO `users` (`id`, `name`, `id_chat`, `status`, `username`, `first_name`, `t_date`, `t_login`, `t_password`, `user_hash`, `image`, `role_id`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `current_team_id`, `profile_photo_path`, `id_cms_privileges`, `photo`, `phone`, `cabinet_id`, `black_at`, `reiting`, `bot_id`, `is_deleted`) VALUES
 	(1, 'Иванов Иван Иванович', NULL, 100, '', NULL, '2022-07-26 09:28:56', 'admin', '$2y$10$cWRNIky5ZJJ7AsqYbLqiX.eGurbg61M7v9ED2RUgOj20ISBH11SoG', NULL, NULL, 0, 'admin@b2bot.ru', NULL, '$2y$10$vmIwZJP.W1/lm7JeMINQTe0Xit.HGTiaEynyMng/HIubQL5evJuFa', NULL, NULL, '2022-08-23 05:31:18', NULL, NULL, NULL, NULL, NULL, 1, 'uploads/10/2022-08/user8.jpg', '79023438040', NULL, NULL, 0, NULL, 0),
 	(4, 'Петров Петр Петрович', NULL, 99, '', NULL, '2022-07-26 09:29:06', 'dev', '$2y$10$cWRNIky5ZJJ7AsqYbLqiX.eGurbg61M7v9ED2RUgOj20ISBH11SoG', NULL, NULL, 0, 'dev@b2bot.ru', NULL, '$2y$10$n5ybq0tc9HHzl5RpzfuNXenW9G5mILu9sGD1l3vlJX8BPSYvQUVne', NULL, NULL, '2022-08-24 04:23:54', NULL, NULL, NULL, NULL, NULL, 2, 'uploads/10/2022-08/user_7.jpg', '79023438041', NULL, NULL, 0, NULL, 0),
@@ -1103,7 +1185,8 @@ INSERT INTO `users` (`id`, `name`, `id_chat`, `status`, `username`, `first_name`
 	(252, 'Ослов Сергей Евгеньевич', NULL, -1, '', NULL, '2022-08-23 13:15:51', NULL, NULL, NULL, NULL, 0, 'zita18@example.com', '2022-08-23 10:15:51', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'QhBX8IL3aq', '2022-08-23 10:15:51', '2022-08-23 10:15:51', NULL, NULL, NULL, NULL, NULL, 2, NULL, '73236313599', 9, NULL, 0, NULL, 0),
 	(253, 'Волков Алексей Сергеич', NULL, 0, '', NULL, '2022-08-23 13:15:51', NULL, NULL, NULL, NULL, 0, 'junius52@example.net', '2022-08-23 10:15:51', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'DUu6hpt7hn', '2022-08-23 10:15:51', '2022-08-23 10:15:51', NULL, NULL, NULL, NULL, NULL, 2, NULL, '72616810062', 9, NULL, 0, NULL, 0),
 	(254, 'Собакин Федор Михайлович', NULL, 0, '', NULL, '2022-08-23 13:15:51', NULL, NULL, NULL, NULL, 0, 'ibednar@example.net', '2022-08-23 10:15:51', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'GqS3xh66T1', '2022-08-23 10:15:51', '2022-08-23 10:15:51', NULL, NULL, NULL, NULL, NULL, 2, NULL, '72408408138', 9, NULL, 0, NULL, 0),
-	(255, 'Волчков Алексей Ильич', NULL, -1, '', NULL, '2022-08-23 13:15:51', NULL, NULL, NULL, NULL, 0, 'berge.oswald@example.com', '2022-08-23 10:15:51', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ZIoS6n6DVE', '2022-08-23 10:15:51', '2022-08-23 10:15:51', NULL, NULL, NULL, NULL, NULL, 2, NULL, '73654450376', 2, NULL, 0, NULL, 0);
+	(255, 'Волчков Алексей Ильич', NULL, -1, '', NULL, '2022-08-23 13:15:51', NULL, NULL, NULL, NULL, 0, 'berge.oswald@example.com', '2022-08-23 10:15:51', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ZIoS6n6DVE', '2022-08-23 10:15:51', '2022-08-23 10:15:51', NULL, NULL, NULL, NULL, NULL, 2, NULL, '73654450376', 2, NULL, 0, NULL, 0),
+	(257, 'Хромов Василий Иванович', NULL, 0, '', NULL, '2022-08-24 12:37:56', NULL, NULL, NULL, NULL, 0, 'ohyatt6@example.com', NULL, '', NULL, '2022-08-24 09:37:56', NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '79272531330', NULL, NULL, 0, NULL, 0);
 
 -- Дамп структуры для таблица personal.users_profiles
 DROP TABLE IF EXISTS `users_profiles`;
