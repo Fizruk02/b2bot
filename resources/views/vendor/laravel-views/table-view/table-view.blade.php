@@ -26,7 +26,7 @@ UI components used:
   @else
     {{-- Empty data message --}}
     <div class="flex justify-center items-center p-4">
-      <h3>{{ __('There are no items in this table') }}</h3>
+      <h3>{{ __('Данные не найдены') }}</h3>
     </div>
   @endif
 

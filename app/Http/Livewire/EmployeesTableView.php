@@ -24,7 +24,8 @@ class EmployeesTableView extends TableView
 
     protected $paginate = 20;
 
-    public $searchBy = ['users.name', 'users.phone', 'users_profiles.comment', 'users_profiles.city', 'cabinet.users.name'];
+    //public $searchBy = ['users.name', 'users.phone', 'users_profiles.comment', 'users_profiles.city', 'cabinet.users.name'];
+    public $searchBy = ['users.name', 'users.phone', 'users_profiles.comment', 'users_profiles.city'];
 
     public function headers(): array
     {
