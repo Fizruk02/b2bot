@@ -2,12 +2,13 @@
 
 namespace App\Filters;
 
+use App\Models\Cabinet;
 use Illuminate\Database\Eloquent\Builder;
 use LaravelViews\Filters\Filter;
 
-class UsersActiveFilter extends Filter
+class UsersAdminFilter extends Filter
 {
-    public $title =  "Статус";
+    public $title =  "Администратор";
 
     /**
      * Modify the current query when the filter is used
@@ -18,7 +19,7 @@ class UsersActiveFilter extends Filter
      */
     public function apply(Builder $query, $value, $request)
     {
-        return $query->where('users.status', $value);
+        return $query->where('users.cabinet_id', $value);
     }
 
     /**
@@ -28,12 +29,16 @@ class UsersActiveFilter extends Filter
      */
     public function options()
     {
-        return [
-            'Активные' => 0,
-            'Новые' => -1,
-            'Черный список' => -10,
-            'Заблокированные' => -20,
-        ];
+        $cabinets = [];
+        $admins = Cabinet::query()
+            ->select(['cabinet.*', 'users.name'])
+            ->join('users', 'cabinet.users_id', '=', 'users.id')
+            ->with(['users'])->orderBy('name')->get();
+
+        foreach ($admins as $admin) {
+            $cabinets[$admin->users->name] = $admin->id;
+        }
+        return $cabinets;
     }
 }
 ?>

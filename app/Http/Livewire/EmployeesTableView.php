@@ -13,6 +13,7 @@ use App\Actions\DeleteUserAction;
 use App\Actions\DeleteUsersAction;
 use LaravelViews\Views\Traits\WithAlerts;
 use App\Filters\UsersActiveFilter;
+use App\Filters\UsersAdminFilter;
 use LaravelViews\Actions\RedirectAction;
 
 class EmployeesTableView extends TableView
@@ -32,13 +33,13 @@ class EmployeesTableView extends TableView
         return [
             '#',
             //Header::title('ID')->sortBy('id'),
-            Header::title('ФИО')->sortBy('name'),
-            Header::title('Телефон')->sortBy('phone'),
+            Header::title('ФИО')->sortBy('users.name'),
+            Header::title('Телефон')->sortBy('users.phone'),
             Header::title('Администратор')->sortBy('admin_name'),
-            Header::title('Город')->sortBy('city'),
-            Header::title('Комментарий')->sortBy('comment'),
-            Header::title('Статус')->sortBy('status'),
-            Header::title('Дата')->sortBy('black_at'),
+            Header::title('Город')->sortBy('users_profiles.city'),
+            Header::title('Комментарий')->sortBy('users_profiles.comment'),
+            Header::title('Статус')->sortBy('users.status'),
+            Header::title('Дата')->sortBy('users.black_at'),
         ];
     }
 
@@ -50,18 +51,22 @@ class EmployeesTableView extends TableView
     public function repository(): Builder
     {
         return Users::query()
-            ->select(['users.*', 'users_profiles.*', 'cabinet.*', 'admin.name as admin_name'])
-            //->select(['users.*', 'users_profiles.*', 'cabinet.*'])
-            ->where('users.id_cms_privileges', 2)
+            ->select([
+                'users.*',
+                'users_profiles.city', 'users_profiles.comment',
+                'cabinet.users_id',
+                'admin.name as admin_name'
+            ])
+            ->with(['cabinet', 'users_profiles'])
             ->join('users_profiles', 'users.id', '=', 'users_profiles.users_id')
             ->join('cabinet', 'users.cabinet_id', '=', 'cabinet.id')
             ->join('users as admin', 'cabinet.users_id', '=', 'admin.id')
-            ->applyScopes();
+            ->where('users.id_cms_privileges', 2)
+            ->whereRaw('`users`.`cabinet_id` IS NOT NULL');
     }
 
     public function row(Users $users)
     {
-        //dd($users->cabinet);
         $status = match ($users->status) {
             0 => 'check',
             -1 => 'check',
@@ -79,13 +84,14 @@ class EmployeesTableView extends TableView
 
         return [
             ($this->page -  1) * $this->paginate + $this->num++,
-            //$user->id,
-            UI::link($users->name, route('cabinets', $users)),
-            $users->phone,
-            $users->cabinet->users->name,
-            $users->city,
+            //$users->id,
+            UI::link($users->name, route('users-view', $users)),
+            @$users->phone,
+            @$users->cabinet->users->name,
+            @$users->users_profiles->city,
+            //'usersProfiles.city',
             //UI::editable($user, 'phone'),
-            $users->comment,
+            @$users->users_profiles->comment,
             UI::icon($status, $class),
             $date,
             //$model->created_at,
@@ -127,6 +133,7 @@ class EmployeesTableView extends TableView
     {
         return [
             new UsersActiveFilter,
+            new UsersAdminFilter,
             //new CreatedFilter,
             //new UsersTypeFilter
         ];

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Users;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -159,6 +160,11 @@ Route::middleware([
         }
     })->name('cabinet_generate');
 
+    Route::get('/test', function () {
+        $u = Users::with(['cabinet', 'users_profiles'])->where('id', 156)->first();
+        dump($u);
+    });
+
     Route::get('/dashboard', function () {
         //dump(Auth::user());
         //return view('crudbooster::home');
@@ -270,7 +276,20 @@ Route::middleware([
         ]);
     })->name('users');
 
-    Route::get('/users-ban', function () {
+    Route::get('/users/view/{users}', function (\App\Models\Users $users) {
+        //dump(Auth::user());
+        //return view('crudbooster::home');
+        return view('liveware', [
+            'title' => 'Сотрудник: '.$users->name,
+            'live' => 'users-detail-view',
+            'route' => 'users',
+            'name' => 'Вернуться',
+            'model' => $users,
+        ]);
+        //return redirect('/home');
+    })->scopeBindings()->name('users-view');
+
+    /*Route::get('/users-ban', function () {
         $page = new \App\Models\WebPages();
         $page->params = [
             'cur' => 1,
@@ -306,7 +325,7 @@ Route::middleware([
             'name' => 'Главная',
             'model' => $page,
         ]);
-    })->name('users-black');
+    })->name('users-black');*/
 
 
 

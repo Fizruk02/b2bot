@@ -19,6 +19,6 @@ class Cabinet extends Model
     public function users()
     {
         return $this->belongsTo(Users::class, 'users_id', 'id');
-        //return $this->hasOne(Users::class, 'id', 'user_id');
+        //return $this->hasOne(Users::class);
     }
 }

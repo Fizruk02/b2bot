@@ -20,6 +20,8 @@ class Users extends Authenticatable
 
     public $table = 'users';
 
+    protected $with = ['users_profiles', 'cabinet'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -67,7 +69,7 @@ class Users extends Authenticatable
      */
     public function cabinet()
     {
-        return $this->belongsTo(Cabinet::class, 'cabinet_id', 'id');
+        return $this->hasOne(Cabinet::class, 'id', 'cabinet_id');
     }
 
     /**
@@ -75,7 +77,9 @@ class Users extends Authenticatable
      */
     public function users_profiles()
     {
-        return $this->belongsTo(UsersProfiles::class, 'id', 'users_id');
+        //return $this->belongsTo(UsersProfiles::class, 'id', 'users_id');
+        return $this->hasOne(UsersProfiles::class, 'users_id', 'id');
+        //return $this->hasOne(UsersProfiles::class, 'id', 'users_id');
     }
 
     /**
@@ -83,7 +87,15 @@ class Users extends Authenticatable
      */
     public function users()
     {
-        return $this->belongsTo(Users::class, 'id', 'id');
+        return $this->hasOne(Users::class, 'id', 'id');
+    }
+
+    /**
+     * Get the user that owns the cabinet.
+     */
+    public function cabinet_admin()
+    {
+        return $this->hasOne(Users::class, 'id', 'id');
     }
 
 }

@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class UsersProfiles extends Model
 {
     use HasFactory;
+
+    protected $table = 'users_profiles';
+
+    /**
+     * Получить пользователя, владеющего данным телефоном.
+     */
+    public function user()
+    {
+        return $this->belongsTo(Users::class, 'users_id', 'id');
+    }
 }

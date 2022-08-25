@@ -5,20 +5,11 @@ namespace App\Http\Livewire;
 use App\Actions\DeleteCabinetAction;
 use App\Actions\DeleteCabinetsAction;
 use App\Models\Cabinet;
-use LaravelViews\Actions\Action;
 use LaravelViews\Views\TableView;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\UserAdmin;
 use LaravelViews\Facades\Header;
 use LaravelViews\Facades\UI;
-use App\Actions\ActivateUserAction;
-use App\Actions\ActivateUsersAction;
-use App\Actions\DeleteUserAction;
-use App\Actions\DeleteUsersAction;
 use LaravelViews\Views\Traits\WithAlerts;
-use App\Filters\UsersActiveFilter;
-use LaravelViews\Actions\RedirectAction;
-use LaravelViews\Views\View;
 
 class CabinetTableView extends TableView
 {
@@ -78,7 +69,10 @@ class CabinetTableView extends TableView
             ->join('cabinet', 'users.id', '=', 'cabinet.user_id')
             ->where('id_cms_privileges', 3)
             ->applyScopes();*/
-        return Cabinet::query()->select(['cabinet.*', 'users.name', 'users.phone'])
+        /*return Cabinet::query()->select(['cabinet.*', 'users.name', 'users.phone'])
+            ->join('users', 'users.id', '=', 'cabinet.users_id')
+            ->applyScopes();*/
+        return Cabinet::query()->select(['cabinet.*', 'users.name', 'users.phone'])->with('users')
             ->join('users', 'users.id', '=', 'cabinet.users_id')
             ->applyScopes();
     }

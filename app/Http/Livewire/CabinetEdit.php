@@ -62,12 +62,12 @@ class CabinetEdit extends EditView
         //dd(config("crudbooster.ADMIN_PATH"));
         config(['crudbooster.ADMIN_PATH' => '']);
 
-        if ($model->user_id) {
-            if(Request::method() == 'POST') return $cUser->postEditSave($model->user_id);
-            return $cUser->getEdit($model->user_id)->render();
+        if ($model->users_id) {
+            if(Request::method() == 'POST') return $cUser->postEditSave($model->users_id);
+            return $cUser->getEdit($model->users_id)->render();
         } else {
-            if(Request::method() == 'POST') return $cUser->postAddSave($model->user_id);
-            return $cUser->getAdd($model->user_id)->render();
+            if(Request::method() == 'POST') return $cUser->postAddSave($model->users_id);
+            return $cUser->getAdd($model->users_id)->render();
         }
 
         /*$id = $model->user_id;
