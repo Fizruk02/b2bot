@@ -183,7 +183,9 @@ Route::middleware([
             'title' => 'Личные кабинеты',
             'live' => 'cabinet-table-view',
             'route' => 'cabinet-add',
-            'name' => 'Создать'
+            'name' => 'Создать',
+            'icon' => 'plus',
+            'ico_class' => 'text-green-600'
         ]);
         //return redirect('/home');
     })->name('cabinets');
@@ -195,8 +197,10 @@ Route::middleware([
             'title' => 'Кабинет: '.$cabinet->users->name,
             'live' => 'cabinet-edit',
             'route' => 'cabinets',
-            'name' => 'Вернуться',
+            'name' => 'Список кабинетов',
             'model' => $cabinet,
+            'icon' => 'list',
+            'ico_class' => 'text-gray-600'
         ]);
         //return redirect('/home');
     })->scopeBindings()->name('cabinet-edit');
@@ -209,8 +213,10 @@ Route::middleware([
             'title' => 'Кабинет: '.$cabinet->users->name,
             'live' => 'cabinet-edit',
             'route' => 'cabinets',
-            'name' => 'Вернуться',
+            'name' => 'Список кабинетов',
             'model' => $cabinet,
+            'icon' => 'list',
+            'ico_class' => 'text-gray-600'
         ]);
         //return redirect('/home');
     })->scopeBindings()->name('cabinet-edit');
@@ -230,8 +236,10 @@ Route::middleware([
             'title' => 'Новый кабинет',
             'live' => 'cabinet-edit',
             'route' => 'cabinets',
-            'name' => 'Вернуться',
+            'name' => 'Список кабинетов',
             'model' => $cabinet,
+            'icon' => 'list',
+            'ico_class' => 'text-gray-600'
         ]);
     })->name('cabinet-add');
 
@@ -242,8 +250,10 @@ Route::middleware([
             'title' => 'Новый кабинет',
             'live' => 'cabinet-edit',
             'route' => 'cabinets',
-            'name' => 'Вернуться',
+            'name' => 'Список кабинетов',
             'model' => $cabinet,
+            'icon' => 'list',
+            'ico_class' => 'text-gray-600'
         ]);
     })->name('cabinet-add');
 
@@ -271,7 +281,7 @@ Route::middleware([
             'title' => 'Пользователи',
             'live' => 'employees-table-view',
             'route' => 'dashboard',
-            'name' => 'Главная',
+            'name' => '',
             'model' => $page,
         ]);
     })->name('users');
@@ -280,10 +290,10 @@ Route::middleware([
         //dump(Auth::user());
         //return view('crudbooster::home');
         return view('liveware', [
-            'title' => 'Сотрудник: '.$users->name,
+            'title' => 'Сотрудник',//.$users->name,
             'live' => 'users-detail-view',
             'route' => 'users',
-            'name' => 'Вернуться',
+            'name' => 'Список пользователей',
             'model' => $users,
         ]);
         //return redirect('/home');

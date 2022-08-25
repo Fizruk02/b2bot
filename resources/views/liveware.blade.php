@@ -19,7 +19,30 @@ else $html = \Livewire\Livewire::mount($live, [
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $title }} <a href="{{ route($route) }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">{{ $name }}</a>
+            <!--
+            <a href="{{ route($route) }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">{{ $name }}</a>
+            -->
+            @if($name)
+                <div class="hidden lg:block justify-items-end">
+                    <div x-data="{ tooltip: false }" class="cursor-pointer relative inline-flex float-right" @mousemove.away="tooltip = false">
+                        <span @mousemove="tooltip = true" @mouseleave="tooltip = false">
+                            <a href="{{ route($route) }}" class="border-transparent text-gray-600 rounded-full hover:text-gray-700 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
+                                <i data-feather="{{ @$icon ? $icon : 'list' }}" class="{{@$ico_class}}"></i>
+                            </a>
+                        </span>
+
+                        <div class="relative" x-show.transition.origin.top="tooltip" style="display: none;">
+                            <div class="flex justify-center absolute top-0 z-10 w-32 p-2 -mt-3 text-sm leading-tight text-white transform -translate-x-1/2 -translate-y-full bg-gray-800 rounded-md shadow-md">
+                                {{ $name }}
+                            </div>
+                            <svg class="absolute z-10 w-6 h-6 text-gray-800 transform -translate-x-8 -translate-y-5 fill-current stroke-current" width="8" height="8">
+                                <rect x="12" y="-10" width="8" height="8" transform="rotate(45)"></rect>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            {{ $title }}
         </h2>
 
     </x-slot>

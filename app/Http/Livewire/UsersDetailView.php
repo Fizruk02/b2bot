@@ -14,13 +14,13 @@ class UsersDetailView extends DetailView
 
     protected $modelClass = \App\Models\Users::class;
 
-    public function heading(Users $users)
+    public function heading(Users $model)
     {
         //dd($model);
         return [
-            '', ''
-            //"Пользователь {$model->name}",
-            //"Профиль пользователя",
+            //'', ''
+            "{$model->name}",
+            "Профиль пользователя",
         ];
     }
 
