@@ -1,11 +1,13 @@
 <?php
 
 use App\Models\Users;
+use App\Models\UsersExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,12 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+    Route::get('/export', function () {
+        $data = new UsersExport();
+        dd(debug_backtrace());
+        return Excel::download($data, 'users.xlsx');
+    })->name('export');
+
     Route::get('/employees_generate', function () {
         $fs = [
             'Зайцев', 'Зайцева', 'Лисицын', 'Волков', 'Медведев', 'Куницын', 'Сапожников', 'Лосев', 'Жирафов', 'Зебрин',

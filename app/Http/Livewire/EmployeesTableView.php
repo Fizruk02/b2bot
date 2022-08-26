@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Actions\ExelExportAction;
 use LaravelViews\Views\TableView;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Users;
@@ -11,14 +12,18 @@ use App\Actions\ActivateUserAction;
 use App\Actions\ActivateUsersAction;
 use App\Actions\DeleteUserAction;
 use App\Actions\DeleteUsersAction;
+use LaravelViews\Views\Traits\WithActions;
 use LaravelViews\Views\Traits\WithAlerts;
 use App\Filters\UsersActiveFilter;
 use App\Filters\UsersAdminFilter;
 use LaravelViews\Actions\RedirectAction;
+use App\Http\Livewire\WithExport;
 
 class EmployeesTableView extends TableView
 {
     use WithAlerts;
+    use WithActions;
+    //use WithExport;
 
     protected $num = 1;
     protected $model = Users::class;
@@ -99,13 +104,37 @@ class EmployeesTableView extends TableView
         ];
     }
 
+    public function rowExport(Users $users)
+    {
+        $status = match ($users->status) {
+            0 => 'Активен',
+            -1 => 'Новый',
+            -20 => 'Забанен',
+            default => 'Черный список'
+        };
+        $date = '';
+        if ($users->status < -1) $date = date(' d.m.Y', $users->black_at);
+        return [
+            ($this->page -  1) * $this->paginate + $this->num++,
+            $users->name,
+            @$users->phone,
+            @$users->cabinet->users->name,
+            @$users->users_profiles->city,
+            @$users->users_profiles->comment,
+            $status,
+            $date,
+            //$model->created_at,
+            //$model->updated_at
+        ];
+    }
+
     /** For actions by item */
     protected function actionsByRow()
     {
         return [
             //new ActivateUserAction,
             //new DeleteUserAction,
-            //new RedirectAction('cabinets', 'Просмотр', 'eye'),
+            new RedirectAction('cabinets', 'Просмотр', 'eye'),
         ];
     }
 
@@ -113,9 +142,24 @@ class EmployeesTableView extends TableView
     protected function bulkActions()
     {
         return [
+            new ExelExportAction(),
             //new ActivateUsersAction,
             //new DeleteUsersAction,
+            //new ExelExportAction,
         ];
+    }
+
+    /** For export actions */
+    protected function exportActions()
+    {
+        return [
+            //new ExelExportAction(),
+        ];
+    }
+
+    public function getHasExportActionsProperty()
+    {
+        return false;
     }
 
     /**

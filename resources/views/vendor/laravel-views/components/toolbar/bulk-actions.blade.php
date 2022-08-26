@@ -6,6 +6,19 @@
     </x-lv-drop-down>
   @endif
 
+  @if ($this->hasExportActions)
+      <x-lv-drop-down label='Экспорт'>
+          <x-lv-actions.icon-and-title :actions="$this->exportActions" />
+      </x-lv-drop-down>
+  @endif
+
+  @if ($this->hasBulkActions)
+      <x-lv-drop-down label='Действия'>
+          <x-lv-drop-down.header label='{{ count($selected) }} Выбрано' />
+          <x-lv-actions.icon-and-title :actions="$this->bulkActions" />
+      </x-lv-drop-down>
+  @endif
+
   @if ($this->hasBulkActions && isset($headers) <= 0)
     <button
       wire:click="$set('allSelected', {{ !$allSelected }})"

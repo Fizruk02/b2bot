@@ -4,7 +4,7 @@
     {{-- Each filter view --}}
     @foreach ($filtersViews as $filter)
       {{-- Filter title --}}
-      <x-lv-drop-down.header :label="$filter->getTitle()" />
+      <x-lv-drop-down.header :label="@$filter->getTitle()" />
       <div class="px-4 mt-4">
         {{-- Filter view --}}
         @include('laravel-views::components.filters.' . $filter->view, [
