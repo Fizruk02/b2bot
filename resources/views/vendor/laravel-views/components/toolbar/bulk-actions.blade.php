@@ -6,7 +6,7 @@
     </x-lv-drop-down>
   @endif
 
-  @if ($this->hasExportActions)
+  @if (isset($this->hasExportActions) && @$this->hasExportActions)
       <x-lv-drop-down label='Экспорт'>
           <x-lv-actions.icon-and-title :actions="$this->exportActions" />
       </x-lv-drop-down>
